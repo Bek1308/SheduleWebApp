@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Панели администратор</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #0a0b1e;
+            color: #ffffff;
+            min-height: 100vh;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        .container {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .main-title {
+            color: #ffffff;
+            font-size: 2.5em;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        select {
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            margin: 10px 0;
+            font-size: 1em;
+        }
+
+        select option {
+            background: #0a0b1e;
+            color: #ffffff;
+        }
+
+        .group-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0, 255, 157, 0.1);
+            padding: 20px 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .group-header .group-icon {
+            color: #00ff9d;
+            font-size: 1.5em;
+        }
+
+        .group-header .group-name {
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .day-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .day-header {
+            background: rgba(0, 255, 157, 0.1);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #00ff9d;
+        }
+
+        .day-header i {
+            font-size: 1.2em;
+        }
+
+        .day-date {
+            font-size: 0.9em;
+            background: rgba(0, 255, 157, 0.2);
+            padding: 5px 15px;
+            border-radius: 8px;
+            color: #ffffff;
+        }
+
+        .lessons-container {
+            padding: 20px;
+        }
+
+        .add-form {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .add-form input {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            color: #ffffff;
+            margin: 5px 0;
+            width: 100%;
+        }
+
+        .add-form button, .edit-button, .save-button {
+            background: rgba(0, 255, 157, 0.2);
+            color: #00ff9d;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .add-form button:hover, .edit-button:hover, .save-button:hover {
+            background: rgba(0, 255, 157, 0.4);
+        }
+
+        .lesson-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .lesson-card:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .lesson-time {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lesson-time .clock-icon {
+            color: #00ff9d;
+        }
+
+        .lesson-type {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .lesson-type.leksiya {
+            background: rgba(255, 166, 0, 0.2);
+            color: #ffa600;
+        }
+
+        .lesson-type.laboratoriya {
+            background: rgba(0, 255, 157, 0.2);
+            color: #00ff9d;
+        }
+
+        .lesson-type.amaliy {
+            background: rgba(64, 128, 255, 0.2);
+            color: #4080ff;
+        }
+
+        .lesson-type.kmro {
+            background: rgba(255, 64, 129, 0.2);
+            color: #ff4081;
+        }
+
+        .lesson-type.sem {
+            background: rgba(156, 39, 176, 0.2);
+            color: #9c27b0;
+        }
+
+        .lesson-subject {
+            font-size: 1.1em;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .lesson-details {
+            display: flex;
+            gap: 20px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9em;
+        }
+
+        .lesson-teacher, .lesson-room {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lesson-teacher i, .lesson-room i {
+            color: #00ff9d;
+        }
+
+        .edit-form {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .edit-form input {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            color: #ffffff;
+            margin: 5px 0;
+            width: 100%;
+        }
+
+        .no-lessons.sunday {
+            color: #ff4d4d; /* Qizil rang */
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+    <script>
+        function toggleEditForm(id) {
+            console.log("Toggling edit form for ID:", id);
+            const form = document.getElementById(`edit-form-${id}`);
+            if (form) {
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            } else {
+                console.error(`Edit form with ID edit-form-${id} not found`);
+            }
+        }
+
+        function saveEdit(id) {
+            console.log("Saving edit for ID:", id);
+            const form = document.getElementById(`edit-form-${id}`);
+            if (!form) {
+                console.error(`Edit form with ID edit-form-${id} not found`);
+                return;
+            }
+            const data = {
+                faculty: form.querySelector('input[name="faculty"]').value,
+                course: form.querySelector('input[name="course"]').value,
+                group: form.querySelector('input[name="group"]').value,
+                day: form.querySelector('input[name="day"]').value,
+                lesson_time: form.querySelector('input[name="lesson_time"]').value,
+                lesson_type: form.querySelector('input[name="lesson_type"]').value,
+                subject: form.querySelector('input[name="subject"]').value,
+                teacher: form.querySelector('input[name="teacher"]').value,
+                room: form.querySelector('input[name="room"]').value
+            };
+
+            fetch(`/admin/update/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(data).toString()
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 'success') {
+                    location.reload();
+                } else {
+                    alert('Хато юз берди!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Сервер билан муаммо!');
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-title">Идоракунии ҷадвалҳо</h1>
+
+        <form method="GET" action="/admin">
+            <select name="faculty" onchange="this.form.submit()">
+                <option value="">Факултаро интихоб кунед</option>
+                {% for faculty in faculties %}
+                    <option value="{{ faculty.faculty }}" {% if faculty.faculty == selected_faculty %}selected{% endif %}>
+                        {{ faculty.faculty }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            {% if selected_faculty %}
+            <select name="course" onchange="this.form.submit()">
+                <option value="">Курсро интихоб кунед</option>
+                {% for course in courses %}
+                    <option value="{{ course.course }}" {% if course.course == selected_course %}selected{% endif %}>
+                        {{ course.course }}
+                    </option>
+                {% endfor %}
+            </select>
+            {% endif %}
+
+            {% if selected_course %}
+            <select name="group" onchange="this.form.submit()">
+                <option value="">Гурӯҳро интихоб кунед</option>
+                {% for group in groups %}
+                    <option value="{{ group.group }}" {% if group.group == selected_group %}selected{% endif %}>
+                        {{ group.group }}
+                    </option>
+                {% endfor %}
+            </select>
+            {% endif %}
+        </form>
+
+        {% if selected_group %}
+        <div class="group-header">
+            <i class="fas fa-users group-icon"></i>
+            <span class="group-name">{{ selected_faculty }} | {{ selected_course }} | {{ selected_group }}-гуруҳ</span>
+        </div>
+
+        {% for day in days %}
+        <div class="day-card">
+            <div class="day-header">
+                <i class="fas fa-calendar-day"></i>
+                <span class="day-name">{{ day }}</span>
+                <span class="day-date">{{ week_dates[day] }}</span>
+            </div>
+            <div class="lessons-container">
+                <div class="add-form">
+                    <form method="POST" action="/admin/add">
+                        <input type="hidden" name="faculty" value="{{ selected_faculty }}">
+                        <input type="hidden" name="course" value="{{ selected_course }}">
+                        <input type="hidden" name="group" value="{{ selected_group }}">
+                        <input type="hidden" name="day" value="{{ day }}">
+                        <input type="text" name="lesson_time" placeholder="Вақти дарс" required><br>
+                        <input type="text" name="lesson_type" placeholder="Навъи дарс" required><br>
+                        <input type="text" name="subject" placeholder="Фан" required><br>
+                        <input type="text" name="teacher" placeholder="Омӯзгор" required><br>
+                        <input type="text" name="room" placeholder="Хона" required><br>
+                        <button type="submit">Илова кардан</button>
+                    </form>
+                </div>
+
+                {% if day == "Якшанбе" %}
+                    <div class="no-lessons sunday">
+                        <p>Дарс мавҷуд емас!</p>
+                    </div>
+                {% elif schedules[day] %}
+                    {% for schedule in schedules[day] %}
+                    <div class="lesson-card">
+                        <div>
+                            <div class="lesson-time">
+                                <i class="fas fa-clock clock-icon"></i>
+                                {{ schedule.lesson_time }}
+                            </div>
+                            <div class="lesson-type {{ schedule.lesson_type|lower }}">{{ schedule.lesson_type }}</div>
+                            <div class="lesson-subject">{{ schedule.subject }}</div>
+                            <div class="lesson-details">
+                                <div class="lesson-teacher">
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                    {{ schedule.teacher }}
+                                </div>
+                                <div class="lesson-room">
+                                    <i class="fas fa-door-open"></i>
+                                    {{ schedule.room }}
+                                </div>
+                            </div>
+                        </div>
+                        <button class="edit-button" onclick="toggleEditForm('{{ schedule.id|default(0) }}')">Тахрир</button>
+                        <div class="edit-form" id="edit-form-{{ schedule['id']|default(0) }}">
+                            <form>
+                                <input type="hidden" name="faculty" value="{{ schedule.faculty }}">
+                                <input type="hidden" name="course" value="{{ schedule.course }}">
+                                <input type="hidden" name="group" value="{{ schedule.group }}">
+                                <input type="text" name="day" value="{{ schedule.day }}" required><br>
+                                <input type="text" name="lesson_time" value="{{ schedule.lesson_time }}" required><br>
+                                <input type="text" name="lesson_type" value="{{ schedule.lesson_type }}" required><br>
+                                <input type="text" name="subject" value="{{ schedule.subject }}" required><br>
+                                <input type="text" name="teacher" value="{{ schedule.teacher }}" required><br>
+                                <input type="text" name="room" value="{{ schedule.room }}" required><br>
+                                <button type="button" class="save-button" onclick="saveEdit('{{ schedule.id|default(0) }}')">Сақлаш</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-lessons">
+                        <p>Дар ин рӯз жадвали дарсӣ вуҷуд надорад!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</body>
+</html>

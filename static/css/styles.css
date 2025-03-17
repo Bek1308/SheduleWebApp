@@ -1,0 +1,277 @@
+/* Common styles */
+body {
+    background-color: #0a0b1e;
+    color: #ffffff;
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    max-width: 1200px;
+}
+
+/* Welcome page styles */
+.welcome-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.main-title {
+    color: #ffffff;
+    font-size: 2.5em;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.welcome-text {
+    font-size: 1.2em;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 2rem;
+}
+
+.instruction-text {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1rem;
+}
+
+.url-example {
+    display: block;
+    background: rgba(0, 255, 157, 0.1);
+    color: #00ff9d;
+    padding: 1rem;
+    border-radius: 10px;
+    font-family: monospace;
+    margin: 1rem 0;
+}
+
+/* Group header styles */
+.group-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(0, 255, 157, 0.1);
+    padding: 20px 25px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+.group-header .group-icon {
+    color: #00ff9d;
+    font-size: 1.5em;
+}
+
+.group-header .group-name {
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+/* Day card styles */
+.day-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.day-card.weekend {
+    background: rgba(255, 100, 100, 0.05);
+}
+
+.day-card.weekend .day-header {
+    background: rgba(255, 100, 100, 0.1);
+    color: #ff6464;
+}
+
+.day-header {
+    background: rgba(0, 255, 157, 0.1);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.3em;
+    font-weight: 600;
+    color: #00ff9d;
+}
+
+.day-header i {
+    font-size: 1.2em;
+}
+
+.day-header .day-name {
+    margin-right: auto;
+}
+
+.day-header .day-date {
+    font-size: 0.9em;
+    background: rgba(0, 255, 157, 0.2);
+    padding: 5px 15px;
+    border-radius: 8px;
+    color: #ffffff;
+}
+
+.weekend .day-header .day-date {
+    background: rgba(255, 100, 100, 0.2);
+}
+
+.lessons-container {
+    padding: 20px;
+}
+
+/* No lessons message */
+.no-lessons {
+    text-align: center;
+    padding: 40px 20px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.no-lessons i {
+    font-size: 3em;
+    margin-bottom: 20px;
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.no-lessons p {
+    font-size: 1.2em;
+    margin: 0;
+}
+
+/* Lesson card styles */
+.lesson-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.lesson-card:hover {
+    transform: translateX(10px);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.lesson-time {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.lesson-time .clock-icon {
+    color: #00ff9d;
+}
+
+.lesson-type {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.lesson-type.лексия {
+    background: rgba(255, 166, 0, 0.2);
+    color: #ffa600;
+}
+
+.lesson-type.лаборатория {
+    background: rgba(0, 255, 157, 0.2);
+    color: #00ff9d;
+}
+
+.lesson-type.амалий {
+    background: rgba(64, 128, 255, 0.2);
+    color: #4080ff;
+}
+
+.lesson-type.кмро {
+    background: rgba(255, 64, 129, 0.2);
+    color: #ff4081;
+}
+
+.lesson-type.сем {
+    background: rgba(156, 39, 176, 0.2);
+    color: #9c27b0;
+}
+
+.lesson-subject {
+    font-size: 1.1em;
+    font-weight: 500;
+    margin-bottom: 15px;
+    color: #ffffff;
+    word-break: break-word;
+}
+
+.lesson-details {
+    display: flex;
+    gap: 20px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9em;
+}
+
+.lesson-teacher, .lesson-room {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lesson-teacher i, .lesson-room i {
+    color: #00ff9d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .main-title {
+        font-size: 1.8em;
+    }
+    
+    .lesson-card {
+        padding: 15px;
+    }
+    
+    .lesson-details {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .welcome-card {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+    
+    .url-example {
+        font-size: 0.9em;
+        padding: 0.75rem;
+        word-break: break-all;
+    }
+    
+    .day-header {
+        padding: 15px;
+        font-size: 1.1em;
+    }
+    
+    .lessons-container {
+        padding: 15px;
+    }
+    
+    .no-lessons {
+        padding: 30px 15px;
+    }
+    
+    .no-lessons i {
+        font-size: 2.5em;
+    }
+}

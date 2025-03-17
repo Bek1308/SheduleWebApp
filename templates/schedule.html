@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ group }} - Ҷадвали дарсӣ</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+    <style>
+        .no-lessons.sunday {
+            color: #ff4d4d; /* Qizil rang */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="group-header">
+            <i class="fas fa-users group-icon"></i>
+            <span class="group-name">{{ group }}</span>
+        </div>
+
+        {% if day %}
+            <h2>{{ day }} - Жадвали дарсӣ</h2>
+        {% endif %}
+
+        {% for day_name, data in schedule.items() %}
+        {% if not day or day_name == day %}
+        <div class="day-card {% if data.weekday == 6 %}weekend{% endif %}">
+            <div class="day-header">
+                <i class="fas fa-calendar-day"></i>
+                <span class="day-name">{{ day_name }}</span>
+                <span class="day-date">{{ data.date }}</span>
+            </div>
+            
+            <div class="lessons-container">
+                {% if data.weekday == 6 %}
+                    <div class="no-lessons sunday">
+                        <i class="fas fa-coffee"></i>
+                        <p>Дарс мавҷуд емас!</p>
+                    </div>
+                {% elif data.lessons|length > 0 %}
+                    {% for lesson in data.lessons %}
+                    <div class="lesson-card">
+                        <div class="lesson-time">
+                            <i class="far fa-clock clock-icon"></i>
+                            {{ lesson.time }}
+                        </div>
+                        <div class="lesson-type {{ lesson.type|lower }}">
+                            {{ lesson.type }}
+                        </div>
+                        <div class="lesson-subject">
+                            {{ lesson.subject }}
+                        </div>
+                        <div class="lesson-details">
+                            <div class="lesson-teacher">
+                                <i class="fas fa-user-tie"></i>
+                                {{ lesson.teacher }}
+                            </div>
+                            <div class="lesson-room">
+                                <i class="fas fa-door-open"></i>
+                                {{ lesson.room }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-lessons">
+                        <i class="fas fa-calendar-xmark"></i>
+                        <p>Дар ин рӯз жадвали дарси вуҷуд надорад!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+    </script>
+</body>
+</html>

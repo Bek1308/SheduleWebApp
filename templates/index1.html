@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadval Dasturi - Bosh Sahifa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0b1e 0%, #1e2a44 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #00cc7a !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+            margin-right: 1.5rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #00cc7a !important;
+            transform: translateY(-2px);
+        }
+        .login-btn {
+            background: #00cc7a;
+            color: #0a0b1e !important;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+        .login-btn:hover {
+            background: #009957;
+            color: #ffffff !important;
+            transform: scale(1.1);
+        }
+        .language-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #ffffff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+        .language-select:focus {
+            outline: none;
+            box-shadow: 0 0 5px #00cc7a;
+        }
+        .language-select option {
+            background: #1e2a44;
+            color: #ffffff;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+            background: radial-gradient(circle, rgba(0, 204, 122, 0.1), transparent);
+        }
+        .hero-content {
+            z-index: 20;
+            animation: fadeInUp 1.5s ease-out;
+        }
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #00cc7a;
+            margin-bottom: 1.5rem;
+        }
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: #d0d0d0;
+        }
+        .btn-custom {
+            background: #00cc7a;
+            color: #0a0b1e;
+            padding: 12px 40px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+        .btn-custom:hover {
+            transform: scale(1.1);
+            background: #009957;
+            color: #ffffff;
+        }
+        #three-js-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.6;
+        }
+
+        /* About Section */
+        .about {
+            padding: 6rem 0;
+            background: rgba(255, 255, 255, 0.03);
+            position: relative;
+            z-index: 10;
+        }
+        .about h2 {
+            font-size: 3rem;
+            color: #00cc7a;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .about-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        .about-card:hover {
+            transform: translateY(-15px);
+        }
+        .about-card i {
+            color: #00cc7a;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .about-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Contact & Suggestion Sections */
+        .contact, .suggestion {
+            padding: 6rem 0;
+            background: rgba(255, 255, 255, 0.03);
+            position: relative;
+            z-index: 10;
+        }
+        .contact h2, .suggestion h2 {
+            font-size: 3rem;
+            color: #00cc7a;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .contact-form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2.5rem;
+            border-radius: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            backdrop-filter: blur(5px);
+        }
+        .form-control {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            padding: 12px;
+            transition: box-shadow 0.3s ease;
+        }
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 5px #00cc7a;
+            border-color: #00cc7a;
+        }
+        .form-control::placeholder {
+            color: #ffffff; /* Placeholder matn rangi oq */
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 4rem 0;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        footer h4 {
+            color: #00cc7a;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        footer p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: #d0d0d0;
+        }
+        footer .social-links a {
+            color: #ffffff;
+            font-size: 2rem;
+            margin: 0 15px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        footer .social-links a:hover {
+            color: #00cc7a;
+            transform: scale(1.2);
+        }
+        footer a {
+            color: #00cc7a;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        footer a:hover {
+            color: #009957;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Jadval Dasturi</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="#home" data-lang="home">Bosh Sahifa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about" data-lang="about">Biz Haqimizda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact" data-lang="contact">Kontaktlar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#suggestion" data-lang="suggestion">Takliflar</a></li>
+                    <li class="nav-item"><a class="nav-link login-btn" href="/login" data-lang="login">Kirish</a></li>
+                    <li class="nav-item">
+                        <select class="language-select" onchange="changeLanguage(this.value)">
+                            <option value="tg">Тоҷикӣ</option>
+                            <option value="ru">Русский</option>
+                            <option value="en">English</option>
+                        </select>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <canvas id="three-js-canvas"></canvas>
+        <div class="hero-content">
+            <h1 data-lang="welcome">Jadval Dasturiga Xush Kelibsiz!</h1>
+            <p data-lang="description">Dars jadvalingizni osongina boshqaring va har doim yangi ma'lumotlarga ega bo'ling.</p>
+            <a href="#about" class="btn btn-custom" data-lang="learn-more">Batafsil</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <h2 data-lang="about">Biz Haqimizda</h2>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="about-card">
+                        <i class="fas fa-users"></i>
+                        <h3 data-lang="team">Jamoamiz</h3>
+                        <p data-lang="team-desc">Biz talabalar va o‘qituvchilar uchun qulaylik yaratishga intiluvchi dasturchilar guruhimiz.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="about-card">
+                        <i class="fas fa-code"></i>
+                        <h3 data-lang="mission">Maqsadimiz</h3>
+                        <p data-lang="mission-desc">Zamonaviy texnologiyalar yordamida ta’lim jarayonini soddalashtirish.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="about-card">
+                        <i class="fas fa-clock"></i>
+                        <h3 data-lang="speed">Tezlik</h3>
+                        <p data-lang="speed-desc">Jadvalni real vaqt rejimida yangilash imkoniyati.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <h2 data-lang="contact">Biz bilan Bog‘laning</h2>
+        <div class="container">
+            <form class="contact-form">
+                <input type="text" class="form-control" placeholder="Ismingiz" data-lang-placeholder="name" required>
+                <input type="email" class="form-control" placeholder="Email" data-lang-placeholder="email" required>
+                <textarea class="form-control" rows="5" placeholder="Xabaringiz" data-lang-placeholder="message" required></textarea>
+                <button type="submit" class="btn btn-custom w-100" data-lang="send">Yuborish</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Suggestion Section -->
+    <section id="suggestion" class="suggestion">
+        <h2 data-lang="suggestion">Takliflaringiz</h2>
+        <div class="container">
+            <form class="contact-form">
+                <input type="text" class="form-control" placeholder="Ismingiz" data-lang-placeholder="name" required>
+                <textarea class="form-control" rows="5" placeholder="Taklifingizni yozing" data-lang-placeholder="suggestion-text" required></textarea>
+                <button type="submit" class="btn btn-custom w-100" data-lang="suggest">Taklif Yuborish</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <h4>Jadval Dasturi</h4>
+            <p data-lang="copyright">© 2025 Barcha huquqlar himoyalangan.</p>
+            <div class="social-links">
+                <a href="https://telegram.org" target="_blank"><i class="fab fa-telegram"></i></a>
+                <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="mailto:support@jadval.tj"><i class="fas fa-envelope"></i></a>
+            </div>
+            <p data-lang="contact-info">Kontakt: <a href="mailto:support@jadval.tj">support@jadval.tj</a></p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script>
+        // Hero Section 3D Background
+        const heroScene = new THREE.Scene();
+        const heroCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const heroRenderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-js-canvas'), alpha: true });
+        heroRenderer.setSize(window.innerWidth, window.innerHeight);
+
+        const heroGeometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
+        const heroMaterial = new THREE.MeshBasicMaterial({ color: 0x00cc7a, wireframe: true });
+        const torusKnot = new THREE.Mesh(heroGeometry, heroMaterial);
+        heroScene.add(torusKnot);
+
+        heroCamera.position.z = 30;
+
+        function animateHero() {
+            requestAnimationFrame(animateHero);
+            torusKnot.rotation.x += 0.01;
+            torusKnot.rotation.y += 0.01;
+            heroRenderer.render(heroScene, heroCamera);
+        }
+        animateHero();
+
+        // Resize Handler for Hero
+        window.addEventListener('resize', () => {
+            heroRenderer.setSize(window.innerWidth, window.innerHeight);
+            heroCamera.aspect = window.innerWidth / window.innerHeight;
+            heroCamera.updateProjectionMatrix();
+        });
+
+        // Spider Web Effect
+        !function() {
+            const PARTICLE_COUNT = 400;
+            const PARTICLE_SPEED = 2;
+            const LINE_MAX_DISTANCE = 6000;
+            const LINE_OPACITY_OFFSET = 0.2;
+            const CANVAS_OPACITY = 0.8;
+            const CURSOR_RADIUS = 200;
+            const PARTICLE_SIZE = 1;
+            const WEB_COLOR = "0,204,122";
+
+            function get_attribute(node, attr, default_value) {
+                return node.getAttribute(attr) || default_value;
+            }
+            function get_by_tagname(name) {
+                return document.getElementsByTagName(name);
+            }
+            function get_config_option() {
+                var scripts = get_by_tagname("script"),
+                    script_len = scripts.length,
+                    script = scripts[script_len - 1];
+                return {
+                    l: script_len,
+                    z: get_attribute(script, "zIndex", -1),
+                    o: CANVAS_OPACITY,
+                    c: WEB_COLOR,
+                    n: PARTICLE_COUNT
+                };
+            }
+            function set_canvas_size() {
+                canvas_width = the_canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+                canvas_height = the_canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+            }
+
+            function draw_canvas() {
+                context.clearRect(0, 0, canvas_width, canvas_height);
+                var e, i, d, x_dist, y_dist, dist;
+                random_lines.forEach(function(r, idx) {
+                    r.x += r.xa;
+                    r.y += r.ya;
+                    r.xa *= r.x > canvas_width || r.x < 0 ? -1 : 1;
+                    r.ya *= r.y > canvas_height || r.y < 0 ? -1 : 1;
+
+                    if (current_point.x !== null && current_point.y !== null) {
+                        x_dist = r.x - current_point.x;
+                        y_dist = r.y - current_point.y;
+                        dist = x_dist * x_dist + y_dist * y_dist;
+                        if (dist < CURSOR_RADIUS * CURSOR_RADIUS) {
+                            context.fillRect(r.x - PARTICLE_SIZE / 2, r.y - PARTICLE_SIZE / 2, PARTICLE_SIZE, PARTICLE_SIZE);
+                        }
+                    }
+
+                    for (i = idx + 1; i < all_array.length; i++) {
+                        e = all_array[i];
+                        if (null !== e.x && null !== e.y) {
+                            x_dist = r.x - e.x;
+                            y_dist = r.y - e.y;
+                            dist = x_dist * x_dist + y_dist * y_dist;
+
+                            if (dist < LINE_MAX_DISTANCE && current_point.x !== null && current_point.y !== null) {
+                                const distToCursorR = Math.sqrt(Math.pow(r.x - current_point.x, 2) + Math.pow(r.y - current_point.y, 2));
+                                const distToCursorE = Math.sqrt(Math.pow(e.x - current_point.x, 2) + Math.pow(e.y - current_point.y, 2));
+                                if (distToCursorR < CURSOR_RADIUS && distToCursorE < CURSOR_RADIUS) {
+                                    d = (LINE_MAX_DISTANCE - dist) / LINE_MAX_DISTANCE;
+                                    context.beginPath();
+                                    context.lineWidth = d / 2;
+                                    context.strokeStyle = "rgba(" + WEB_COLOR + "," + (d + LINE_OPACITY_OFFSET) + ")";
+                                    context.moveTo(r.x, r.y);
+                                    context.lineTo(e.x, e.y);
+                                    context.stroke();
+                                }
+                            }
+                        }
+                    }
+                }), frame_func(draw_canvas);
+            }
+
+            var the_canvas = document.createElement("canvas"),
+                config = get_config_option(),
+                canvas_id = "c_n" + config.l,
+                context = the_canvas.getContext("2d"), canvas_width, canvas_height,
+                frame_func = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(func) {
+                    window.setTimeout(func, 1000 / 45);
+                }, random = Math.random,
+                current_point = {
+                    x: null,
+                    y: null,
+                    max: 20000
+                },
+                all_array;
+            the_canvas.id = canvas_id;
+            the_canvas.style.cssText = "position:fixed;top:0;left:0;z-index:5;opacity:" + config.o;
+            get_by_tagname("body")[0].appendChild(the_canvas);
+
+            set_canvas_size(), window.onresize = set_canvas_size;
+
+            window.onmousemove = function(e) {
+                e = e || window.event, current_point.x = e.clientX, current_point.y = e.clientY;
+            }, window.onmouseout = function() {
+                current_point.x = null, current_point.y = null;
+            };
+
+            for (var random_lines = [], i = 0; config.n > i; i++) {
+                var x = random() * canvas_width,
+                    y = random() * canvas_height,
+                    xa = PARTICLE_SPEED * random() - PARTICLE_SPEED / 2,
+                    ya = PARTICLE_SPEED * random() - PARTICLE_SPEED / 2;
+                random_lines.push({
+                    x: x,
+                    y: y,
+                    xa: xa,
+                    ya: ya,
+                    max: LINE_MAX_DISTANCE
+                });
+            }
+            all_array = random_lines.concat([current_point]);
+
+            setTimeout(function() {
+                draw_canvas();
+            }, 100);
+        }();
+
+        // Language Switcher
+        const translations = {
+            tg: {
+                home: "Bosh Sahifa",
+                about: "Biz Haqimizda",
+                contact: "Kontaktlar",
+                suggestion: "Takliflar",
+                login: "Kirish",
+                welcome: "Jadval Dasturiga Xush Kelibsiz!",
+                description: "Dars jadvalingizni osongina boshqaring va har doim yangi ma'lumotlarga ega bo'ling.",
+                "learn-more": "Batafsil",
+                team: "Jamoamiz",
+                "team-desc": "Biz talabalar va o‘qituvchilar uchun qulaylik yaratishga intiluvchi dasturchilar guruhimiz.",
+                mission: "Maqsadimiz",
+                "mission-desc": "Zamonaviy texnologiyalar yordamida ta’lim jarayonini soddalashtirish.",
+                speed: "Tezlik",
+                "speed-desc": "Jadvalni real vaqt rejimida yangilash imkoniyati.",
+                name: "Ismingiz",
+                email: "Email",
+                message: "Xabaringiz",
+                send: "Yuborish",
+                "suggestion-text": "Taklifingizni yozing",
+                suggest: "Taklif Yuborish",
+                copyright: "© 2025 Barcha huquqlar himoyalangan.",
+                "contact-info": "Kontakt: support@jadval.tj"
+            },
+            ru: {
+                home: "Главная",
+                about: "О нас",
+                contact: "Контакты",
+                suggestion: "Предложения",
+                login: "Войти",
+                welcome: "Добро пожаловать в Jadval Dasturi!",
+                description: "Управляйте расписанием уроков легко и всегда будьте в курсе новых данных.",
+                "learn-more": "Подробнее",
+                team: "Наша команда",
+                "team-desc": "Мы — группа разработчиков, стремящихся создать удобство для студентов и преподавателей.",
+                mission: "Наша миссия",
+                "mission-desc": "Упростить образовательный процесс с помощью современных технологий.",
+                speed: "Скорость",
+                "speed-desc": "Возможность обновления расписания в реальном времени.",
+                name: "Ваше имя",
+                email: "Электронная почта",
+                message: "Ваше сообщение",
+                send: "Отправить",
+                "suggestion-text": "Напишите ваше предложение",
+                suggest: "Отправить предложение",
+                copyright: "© 2025 Все права защищены.",
+                "contact-info": "Контакт: support@jadval.tj"
+            },
+            en: {
+                home: "Home",
+                about: "About Us",
+                contact: "Contact",
+                suggestion: "Suggestions",
+                login: "Login",
+                welcome: "Welcome to Jadval Dasturi!",
+                description: "Easily manage your class schedule and stay updated with the latest information.",
+                "learn-more": "Learn More",
+                team: "Our Team",
+                "team-desc": "We are a group of developers aiming to create convenience for students and teachers.",
+                mission: "Our Mission",
+                "mission-desc": "Simplify the educational process using modern technologies.",
+                speed: "Speed",
+                "speed-desc": "Real-time schedule updates.",
+                name: "Your Name",
+                email: "Email",
+                message: "Your Message",
+                send: "Send",
+                "suggestion-text": "Write your suggestion",
+                suggest: "Submit Suggestion",
+                copyright: "© 2025 All rights reserved.",
+                "contact-info": "Contact: support@jadval.tj"
+            }
+        };
+
+        function changeLanguage(lang) {
+            document.querySelectorAll('[data-lang]').forEach(element => {
+                const key = element.getAttribute('data-lang');
+                element.textContent = translations[lang][key];
+            });
+            document.querySelectorAll('[data-lang-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-lang-placeholder');
+                element.placeholder = translations[lang][key];
+            });
+            document.documentElement.lang = lang;
+        }
+
+        // Default language: Tajik
+        changeLanguage('tg');
+    </script>
+</body>
+</html>

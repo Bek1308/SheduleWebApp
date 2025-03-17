@@ -1,0 +1,103 @@
+<!-- templates/fill_data.html -->
+<div class="container">
+    <h2>Ma'lumotlarni Kiritish</h2>
+    <form action="/collect_data" method="POST">
+        <!-- Admin ma'lumotlari -->
+        <div class="mb-3">
+            <h3>Admin</h3>
+            <label for="username" class="form-label">Foydalanuvchi nomi:</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+            <label for="password" class="form-label">Parol:</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+            <label for="institution_type" class="form-label">Muassasa turi (school/university):</label>
+            <input type="text" class="form-control" id="institution_type" name="institution_type" required>
+        </div>
+
+        <!-- Vaqt sozlamalari -->
+        <div class="mb-3">
+            <h3>Vaqt Sozlamalari</h3>
+            <label for="lesson_duration" class="form-label">Dars davomiyligi (daqiqa):</label>
+            <input type="number" class="form-control" id="lesson_duration" name="lesson_duration" required>
+            <label for="break_duration" class="form-label">Tanaffus davomiyligi (daqiqa):</label>
+            <input type="number" class="form-control" id="break_duration" name="break_duration" required>
+            <label for="long_break_duration" class="form-label">Katta tanaffus davomiyligi (daqiqa):</label>
+            <input type="number" class="form-control" id="long_break_duration" name="long_break_duration" required>
+            <label for="long_break_start" class="form-label">Katta tanaffus boshlanishi (HH:MM):</label>
+            <input type="text" class="form-control" id="long_break_start" name="long_break_start" placeholder="12:00" required>
+            <label for="long_break_end" class="form-label">Katta tanaffus tugashi (HH:MM):</label>
+            <input type="text" class="form-control" id="long_break_end" name="long_break_end" placeholder="12:30" required>
+            <label for="first_lesson_start" class="form-label">Birinchi dars boshlanishi (HH:MM):</label>
+            <input type="text" class="form-control" id="first_lesson_start" name="first_lesson_start" placeholder="09:00" required>
+            <label for="last_lesson_end" class="form-label">Oxirgi dars tugashi (HH:MM):</label>
+            <input type="text" class="form-control" id="last_lesson_end" name="last_lesson_end" placeholder="15:00" required>
+            <label for="week_type" class="form-label">Hafta turi (1 yoki 2):</label>
+            <input type="number" class="form-control" id="week_type" name="week_type" min="1" max="2" required>
+        </div>
+
+        <!-- Semestr -->
+        <div class="mb-3">
+            <h3>Semestr</h3>
+            <label for="start_date" class="form-label">Boshlanish sanasi (YYYY-MM-DD):</label>
+            <input type="text" class="form-control" id="start_date" name="start_date" placeholder="2025-09-01" required>
+            <label for="end_date" class="form-label">Tugash sanasi (YYYY-MM-DD):</label>
+            <input type="text" class="form-control" id="end_date" name="end_date" placeholder="2026-01-15" required>
+            <label for="auto_delete" class="form-label">Yangi semestrda o'chirish (0 yoki 1):</label>
+            <input type="number" class="form-control" id="auto_delete" name="auto_delete" min="0" max="1" value="0">
+        </div>
+
+        <!-- Bayramlar -->
+        <div class="mb-3">
+            <h3>Bayramlar</h3>
+            <label for="holiday_name" class="form-label">Bayram nomi:</label>
+            <input type="text" class="form-control" id="holiday_name" name="holiday_name">
+            <label for="holiday_date" class="form-label">Bayram sanasi (YYYY-MM-DD):</label>
+            <input type="text" class="form-control" id="holiday_date" name="holiday_date" placeholder="2025-01-01">
+        </div>
+
+        <!-- Xonalar -->
+        <div class="mb-3">
+            <h3>Xonalar</h3>
+            <label for="room_name" class="form-label">Xona nomi:</label>
+            <input type="text" class="form-control" id="room_name" name="room_name" required>
+            <label for="room_type" class="form-label">Xona turi (classroom/lab/lecture_hall):</label>
+            <input type="text" class="form-control" id="room_type" name="room_type" required>
+            <label for="capacity" class="form-label">Sig'imi:</label>
+            <input type="number" class="form-control" id="capacity" name="capacity" required>
+        </div>
+
+        <!-- Guruhlar -->
+        <div class="mb-3">
+            <h3>Guruhlar</h3>
+            <label for="group_name" class="form-label">Guruh nomi:</label>
+            <input type="text" class="form-control" id="group_name" name="group_name" required>
+            <label for="course" class="form-label">Kurs:</label>
+            <input type="number" class="form-control" id="course" name="course" required>
+            <label for="specialty" class="form-label">Ixtisoslik:</label>
+            <input type="text" class="form-control" id="specialty" name="specialty" required>
+            <label for="faculty" class="form-label">Fakultet:</label>
+            <input type="text" class="form-control" id="faculty" name="faculty" required>
+        </div>
+
+        <!-- O'qituvchilar -->
+        <div class="mb-3">
+            <h3>O'qituvchilar</h3>
+            <label for="teacher_name" class="form-label">Ism va familiya:</label>
+            <input type="text" class="form-control" id="teacher_name" name="teacher_name" required>
+            <label for="degree" class="form-label">Daraja:</label>
+            <input type="text" class="form-control" id="degree" name="degree" required>
+        </div>
+
+        <!-- Darslar -->
+        <div class="mb-3">
+            <h3>Darslar</h3>
+            <label for="lesson_name" class="form-label">Dars nomi:</label>
+            <input type="text" class="form-control" id="lesson_name" name="lesson_name" required>
+            <label for="lesson_type" class="form-label">Dars turi (lecture/practice/lab):</label>
+            <input type="text" class="form-control" id="lesson_type" name="lesson_type" required>
+            <label for="hours" class="form-label">Soatlar soni:</label>
+            <input type="number" class="form-control" id="hours" name="hours" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Ma'lumotlarni Saqlash</button>
+    </form>
+</div>
