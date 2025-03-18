@@ -72,6 +72,11 @@ body {
     text-transform: uppercase;
 }
 
+/* Form styles for week sections */
+form {
+    margin-bottom: 40px; /* Har bir hafta orasida bo‘shliq */
+}
+
 /* Day card styles */
 .day-card {
     background: rgba(255, 255, 255, 0.05);
@@ -80,28 +85,40 @@ body {
     overflow: hidden;
 }
 
-.day-card.weekend {
-    background: rgba(255, 100, 100, 0.05);
+.day-card.has-lessons .day-header {
+    background: rgba(0, 255, 157, 0.1); /* Dars mavjud kun yashil */
+    color: #00ff9d;
 }
 
-.day-card.weekend .day-header {
-    background: rgba(255, 100, 100, 0.1);
+.day-card.no-lessons .day-header {
+    background: rgba(255, 100, 100, 0.1); /* Dars mavjud emas - qizil */
     color: #ff6464;
 }
 
 .day-header {
-    background: rgba(0, 255, 157, 0.1);
     padding: 20px;
     display: flex;
     align-items: center;
     gap: 15px;
     font-size: 1.3em;
     font-weight: 600;
-    color: #00ff9d;
 }
 
 .day-header i {
     font-size: 1.2em;
+}
+
+.day-header .today-marker {
+    font-size: 1.2em;
+    margin-right: 5px;
+}
+
+.day-card.has-lessons .day-header .today-marker {
+    color: #ff6464; /* Dars mavjud kunda yulduzcha qizil */
+}
+
+.day-card.no-lessons .day-header .today-marker {
+    color: #00ff9d; /* Dars mavjud bo‘lmaganda yulduzcha yashil */
 }
 
 .day-header .day-name {
@@ -110,14 +127,17 @@ body {
 
 .day-header .day-date {
     font-size: 0.9em;
-    background: rgba(0, 255, 157, 0.2);
     padding: 5px 15px;
     border-radius: 8px;
     color: #ffffff;
 }
 
-.weekend .day-header .day-date {
-    background: rgba(255, 100, 100, 0.2);
+.day-card.has-lessons .day-header .day-date {
+    background: rgba(0, 255, 157, 0.2); /* Yashil fon */
+}
+
+.day-card.no-lessons .day-header .day-date {
+    background: rgba(255, 100, 100, 0.2); /* Qizil fon */
 }
 
 .lessons-container {
@@ -189,6 +209,11 @@ body {
 }
 
 .lesson-type.амалий {
+    background: rgba(64, 128, 255, 0.2);
+    color: #4080ff;
+}
+
+.lesson-type.амалй {
     background: rgba(64, 128, 255, 0.2);
     color: #4080ff;
 }
