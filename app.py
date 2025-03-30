@@ -4,7 +4,7 @@ import os
 from datetime import datetime, timedelta
 from auth import init_users_db, register, login  # auth.py dan import
 import hashlib
-import difflib
+from difflib import SequenceMatcher
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey123'  # Sessiya va flash xabarlari uchun
@@ -57,9 +57,6 @@ def migrate_schedules():
         week_type TEXT NOT NULL CHECK (week_type IN ('Четный', 'Нечетный'))
     )''')
 
-    # Agar ustunlar mavjud bo'lsa, ularni NOT NULL qilish uchun tekshirish
-
-
     # Schedules jadvalini .txt fayllardan to‘ldirish
     for faculty in os.listdir(RESOURCES_PATH):
         faculty_path = os.path.join(RESOURCES_PATH, faculty)
@@ -100,7 +97,7 @@ def migrate_schedules():
                                 for week_type in ["Четный", "Нечетный"]:
                                     cursor.execute('''INSERT INTO schedules 
                                         (faculty, course, "group", day, lesson_time, lesson_type, subject, teacher, room, week_type)
-                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', 
                                         (faculty, course, group, day_key, lesson['time'], 
                                          lesson['type'] or '', lesson['subject'] or '', lesson['teacher'] or '', 
                                          lesson['room'] or '', week_type))
@@ -118,10 +115,26 @@ def migrate_schedules():
     conn.close()
     print("✅ Schedules jadvali migratsiyasi muvaffaqiyatli yakunlandi.")
 
-
 DAYS_OF_WEEK = ["Душанбе", "Сешанбе", "Чоршанбе", "Панҷшанбе", "Ҷумъа", "Шанбе", "Якшанбе"]
 
-import difflib
+def normalize_day_name(day_name):
+    """Kun nomini normalizatsiya qilish: katta-kichik harflarni tenglashtirish va bo'shliqlarni olib tashlash."""
+    return day_name.strip().lower().replace(" ", "")
+
+def find_closest_day(day_from_file, threshold=0.8):
+    """Fayldan olingan kun nomini DAYS_OF_WEEK bilan solishtirib, eng yaqin mos keluvchini topish."""
+    normalized_input = normalize_day_name(day_from_file)
+    best_match = None
+    highest_similarity = 0
+
+    for day in DAYS_OF_WEEK:
+        normalized_day = normalize_day_name(day)
+        similarity = SequenceMatcher(None, normalized_input, normalized_day).ratio()
+        if similarity > highest_similarity and similarity >= threshold:
+            highest_similarity = similarity
+            best_match = day
+
+    return best_match
 
 def normalize_teacher_name(teacher_name):
     """Muallim nomini normalizatsiya qilish."""
@@ -139,7 +152,7 @@ def normalize_teacher_name(teacher_name):
 
 def are_names_similar(name1, name2, threshold=0.8):
     """Ikkita nomning o‘xshashligini tekshirish (foiz asosida)."""
-    similarity = difflib.SequenceMatcher(None, name1, name2).ratio()
+    similarity = SequenceMatcher(None, name1, name2).ratio()
     return similarity >= threshold
 
 def find_existing_teacher(cursor, teacher_name, existing_teachers):
@@ -172,7 +185,7 @@ def migrate_teachers():
     
     # Yangi muallimlarni qo‘shish
     for teacher in raw_teachers:
-        # O‘xshash muallim bazada borligini tekshirish
+        # O‘xshash muallim bazada borligini LMPshirish
         matched_teacher = find_existing_teacher(cursor, teacher, existing_teachers)
         
         if matched_teacher:
@@ -195,7 +208,6 @@ def migrate_teachers():
     conn.commit()
     conn.close()
     print("✅ Teachers jadvali migratsiyasi muvaffaqiyatli yakunlandi.")
-
 
 def get_current_week_dates():
     today = datetime.now()
@@ -221,12 +233,11 @@ def parse_schedule(content):
         line = line.strip()
         if not line:
             continue
-        if any(day.lower() in line.lower() for day in DAYS_OF_WEEK):
-            for day in DAYS_OF_WEEK:
-                if day.lower() in line.lower():
-                    current_day = day
-                    file_schedule[current_day] = []
-                    break
+        # Hafta kunini aniqlash
+        potential_day = find_closest_day(line)
+        if potential_day:
+            current_day = potential_day
+            file_schedule[current_day] = []
         elif current_day:
             parts = line.split('|')
             if len(parts) >= 5:
@@ -239,6 +250,7 @@ def parse_schedule(content):
                 }
                 file_schedule[current_day].append(lesson)
     
+    # Jadvalni DAYS_OF_WEEK bo'yicha to'ldirish
     for day in DAYS_OF_WEEK:
         schedule[day] = {'date': '', 'weekday': DAYS_OF_WEEK.index(day), 'lessons': file_schedule.get(day, [])}
     return schedule
@@ -358,7 +370,6 @@ def get_day_schedule(faculty, course, group):
         response += f"⏰ {lesson['lesson_time']}\n🔖 {lesson['lesson_type']}\n📌 {lesson['subject']}\n👨‍🏫 {lesson['teacher']}\n🏫 {lesson['room']}\n\n"
     return response
 
-# 1. show_teacher_schedule funksiyasi
 @app.route('/teacher/<teacher_code>')
 def show_teacher_schedule(teacher_code): 
     conn = get_db_connection()
@@ -416,7 +427,6 @@ def show_teacher_schedule(teacher_code):
 
     return render_template('teacher_schedule.html', schedule=schedule, teacher_name=teacher_name, teacher_code=teacher_code)
     
-# 2. get_teacher_day_schedule funksiyasi
 @app.route('/get_teacher_day/<teacher_code>')
 def get_teacher_day_schedule(teacher_code):
     day = request.args.get('day')
@@ -453,7 +463,6 @@ def get_teacher_day_schedule(teacher_code):
     finally:
         conn.close()
 
-# 3. get_teachers_with_codes funksiyasi
 @app.route('/get_teachers_with_codes')
 def get_teachers_with_codes():
     conn = get_db_connection()
@@ -464,7 +473,6 @@ def get_teachers_with_codes():
         conn.close()
     return jsonify(result)
 
-# 4. check_teacher_code funksiyasi
 @app.route('/check_teacher_code', methods=['POST'])
 def check_teacher_code():
     data = request.json
@@ -593,6 +601,6 @@ def update_schedule(id):
 
 if __name__ == '__main__':
     migrate_schedules()
-    migrate_teachers()  # Muallimlar bazasini ishga tush
+    migrate_teachers()  # Muallimlar bazasini ishga tushirish
     init_users_db()  # Foydalanuvchilar bazasini ishga tushirish
     app.run(debug=True, host='0.0.0.0', port=5000)
