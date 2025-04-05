@@ -207,13 +207,20 @@ form {
     background: rgba(0, 255, 157, 0.2);
     color: #00ff9d;
 }
-
+.lesson-type.лаборатори {
+    background: rgba(0, 255, 157, 0.2);
+    color: #00ff9d;
+}
 .lesson-type.амалий {
     background: rgba(64, 128, 255, 0.2);
     color: #4080ff;
 }
 
 .lesson-type.амалй {
+    background: rgba(64, 128, 255, 0.2);
+    color: #4080ff;
+}
+.lesson-type.амали{
     background: rgba(64, 128, 255, 0.2);
     color: #4080ff;
 }
