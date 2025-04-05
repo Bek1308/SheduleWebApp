@@ -19,7 +19,7 @@
         {% for week_type, days in schedule.items() %}
             <form name="{{ week_type }}">
                 <div class="week-section">
-                    <h2>{{ week_type }} Хафта</h2>
+                    <h2>Хафтаи {{ display_week_types[week_type] }}</h2>
                     {% for day_name, data in days.items() %}
                         {% if not day or day_name == day %}
                             <div class="day-card {% if data.lessons|length > 0 %}has-lessons{% else %}no-lessons{% endif %}">
