@@ -35,6 +35,33 @@ def generate_teacher_code(teacher_name, teacher_id):
     hash_output = hashlib.md5(hash_input).hexdigest()[:6]
     return hash_output.upper()
 
+def parse_schedule(content):
+    schedule = {}
+    current_day = None
+    file_schedule = {}
+    for line in content.split('\n'):
+        line = line.strip()
+        if not line:
+            continue
+        potential_day = find_closest_day(line)
+        if potential_day:
+            current_day = potential_day
+            file_schedule[current_day] = []
+        elif current_day:
+            parts = line.split('|')
+            if len(parts) >= 5:
+                lesson = {
+                    'subject': parts[0].strip(),
+                    'type': parts[1].strip(),
+                    'teacher': parts[2].strip(),
+                    'time': parts[3].strip(),
+                    'room': parts[4].strip()
+                }
+                file_schedule[current_day].append(lesson)
+    for day in DAYS_OF_WEEK:
+        schedule[day] = {'date': '', 'weekday': DAYS_OF_WEEK.index(day), 'lessons': file_schedule.get(day, [])}
+    return schedule
+
 def migrate_schedules():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -79,13 +106,13 @@ def migrate_schedules():
                         if day_key not in seen_times_by_day:
                             seen_times_by_day[day_key] = {}
                         for lesson in data['lessons']:
-                            time_key = lesson['time']
+                            time_key = lesson['time'].strip()
                             if time_key not in seen_times_by_day[day_key]:
                                 seen_times_by_day[day_key][time_key] = []
                             seen_times_by_day[day_key][time_key].append(lesson)
                     
                     # "Панҷшанбе" kuni uchun tekshiruv
-                    if "Панҷшанбе" not in seen_times_by_day:
+                    if "Панҷшанбе" not in seen_times_by_day or not seen_times_by_day["Панҷшанбе"]:
                         for week_type in ["Четный", "Нечетный"]:
                             cursor.execute('''INSERT INTO schedules 
                                 (faculty, course, "group", day, lesson_time, lesson_type, subject, teacher, room, week_type)
@@ -104,7 +131,8 @@ def migrate_schedules():
                                          lesson['type'] or '', lesson['subject'] or '', lesson['teacher'] or '', 
                                          lesson['room'] or '', week_type))
                             else:
-                                for i, lesson in enumerate(lessons):
+                                # Bir xil vaqtdagi ikkita darsni alohida haftalarga ajratish
+                                for i, lesson in enumerate(lessons[:2]):  # Faqat ikkita darsni olamiz
                                     week_type = "Четный" if i == 0 else "Нечетный"
                                     cursor.execute('''INSERT INTO schedules 
                                         (faculty, course, "group", day, lesson_time, lesson_type, subject, teacher, room, week_type)
@@ -113,7 +141,7 @@ def migrate_schedules():
                                          lesson['type'] or '', lesson['subject'] or '', lesson['teacher'] or '', 
                                          lesson['room'] or '', week_type))
                     
-                    # Boshqa kunlar
+                    # Boshqa kunlar uchun migratsiya
                     for day, times in seen_times_by_day.items():
                         if day == "Панҷшанбе":
                             continue
@@ -128,7 +156,8 @@ def migrate_schedules():
                                          lesson['type'] or '', lesson['subject'] or '', lesson['teacher'] or '', 
                                          lesson['room'] or '', week_type))
                             else:
-                                for i, lesson in enumerate(lessons):
+                                # Bir xil vaqtdagi ikkita darsni alohida haftalarga ajratish
+                                for i, lesson in enumerate(lessons[:2]):  # Faqat ikkita darsni olamiz
                                     week_type = "Четный" if i == 0 else "Нечетный"
                                     cursor.execute('''INSERT INTO schedules 
                                         (faculty, course, "group", day, lesson_time, lesson_type, subject, teacher, room, week_type)
@@ -160,7 +189,7 @@ def find_closest_day(day_from_file, threshold=0.8):
 
 def normalize_teacher_name(teacher_name):
     teacher_name = teacher_name.strip()
-    prefixes = ["н.и техникӣ", "н.и.иқтисодӣ", "н.и.", "дотс.", "проф.", "техникӣ", "иқтисодӣ", "доц.", "профессор", "профессори", "доцент", "доценти","таърих", "таърихи", "мудири"]
+    prefixes = ["н.и техникӣ", "н.и.иқтисодӣ", "н.и.", "дотс.", "проф.", "техникӣ", "иқтисодӣ", "доц.", "профессор", "профессори", "доцент", "доценти", "таърих", "таърихи", "мудири"]
     for prefix in prefixes:
         if prefix in teacher_name:
             teacher_name = teacher_name.replace(prefix, "").strip()
@@ -232,33 +261,6 @@ def get_week_type():
 
 def display_week_type(week_type):
     return "Сурат" if week_type == "Четный" else "Махрач"
-
-def parse_schedule(content):
-    schedule = {}
-    current_day = None
-    file_schedule = {}
-    for line in content.split('\n'):
-        line = line.strip()
-        if not line:
-            continue
-        potential_day = find_closest_day(line)
-        if potential_day:
-            current_day = potential_day
-            file_schedule[current_day] = []
-        elif current_day:
-            parts = line.split('|')
-            if len(parts) >= 5:
-                lesson = {
-                    'subject': parts[0].strip(),
-                    'type': parts[1].strip(),
-                    'teacher': parts[2].strip(),
-                    'time': parts[3].strip(),
-                    'room': parts[4].strip()
-                }
-                file_schedule[current_day].append(lesson)
-    for day in DAYS_OF_WEEK:
-        schedule[day] = {'date': '', 'weekday': DAYS_OF_WEEK.index(day), 'lessons': file_schedule.get(day, [])}
-    return schedule
 
 @app.route('/')
 def index():
@@ -377,17 +379,6 @@ def get_day_schedule(faculty, course, group):
             WHERE faculty=? AND course=? AND "group"=? AND day=? AND week_type=?
             ORDER BY lesson_time
         ''', (faculty, course, group, normalized_day, current_week_type)).fetchall()
-        
-        # Agar "Панҷшанбе" bo'lsa va dars topilmasa, standart dars qo'shish
-        if normalized_day == "Панҷшанбе" and not lessons:
-            lessons = [{
-                'lesson_time': "******",
-                'lesson_type': "******",
-                'subject': "ТАЙЁРИИ ҲАРБӢ",
-                'teacher': "******",
-                'room': "******",
-                'week_type': current_week_type
-            }]
         
         if not lessons and normalized_day != "Якшанбе":
             return f"❌ Дар ин рӯз ({normalized_day}) барои гуруҳи--{group} жадвали дарси вуҷуд надорад (Хафтаи {display_current_week_type})!"
@@ -529,7 +520,7 @@ def get_teacher_day_schedule(teacher_code):
                 f"🔖 {first_lesson['lesson_type']}\n"
                 f"📌 {first_lesson['subject']}\n"
                 f"🏫 {first_lesson['room']}\n"
-                f"👥 <b>Гурӯҳ(лар):</b>\n{groups_html}\n\n"
+                f"👥 <b>Гурӯҳ(o)):</b>\n{groups_html}\n\n"
             )
         return response
     finally:
